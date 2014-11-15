@@ -15,7 +15,7 @@ import scala.util.Random
  * чтобы в течение 100 лет с вер-ю 0.95
  * не было наводнения
  */
-object LabTwo extends App {
+object LabTwo {
 
   /** Кол-во лет для расчета */
   private val Years = 100
@@ -26,9 +26,8 @@ object LabTwo extends App {
   /** Кол-во испытаний */
   private val TrialCount = 1000
 
-  action()
-
-  private def action() {
+  /** TODO */
+  def action() = {
     /** Список максимальных высоты из 1000 испытаний */
     val trialList = for (i <- 1 to TrialCount) yield getHmax
     /** Макс. значение высоты */
@@ -54,6 +53,7 @@ object LabTwo extends App {
     intervalList.foreach(_.addBelongValues(trialList))
     intervalList.foreach(println)
 
+    intervalList
   }
 
   /** Возвращает макс. значение высоты из 100 сгенерированных */
@@ -68,11 +68,21 @@ object LabTwo extends App {
   /** Формат вывода вещ. числа */
   def formatFloat(value: Float) = value formatted "%1.3f"
 
+  /** Тестирование */
+  def main(args: Array[String]) {
+    action()
+  }
+
 }
 
+/** Интервал для создания диаграммы */
 case class Interval(start: Float, end: Float) {
+
   /** Спиок значений принадлежащих интервалу */
   private val valueList = new ListBuffer[Float]
+
+  /** Конечное значение в виде строки для диаграммы */
+  def endAsString = LabTwo.formatFloat(end)
 
   /** Добавляет только те значения, которые принадлежат интервалу */
   def addBelongValues(list: Seq[Float]) {
@@ -81,5 +91,8 @@ case class Interval(start: Float, end: Float) {
     }
   }
 
-  override def toString = s"Interval(${LabTwo.formatFloat(start)} = ${LabTwo.formatFloat(end)})[${valueList.size}]"
+  /** Кол-во входящих значений */
+  def valueCount = valueList.size
+
+  override def toString = s"Interval(${LabTwo.formatFloat(start)} = ${LabTwo.formatFloat(end)})[$valueCount]"
 }
