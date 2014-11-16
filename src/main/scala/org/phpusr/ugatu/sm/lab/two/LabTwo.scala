@@ -26,7 +26,7 @@ object LabTwo {
   /** Кол-во испытаний */
   private val TrialCount = 1000
 
-  /** TODO */
+  /** Поиск подходящей высоты */
   def action() = {
     /** Список максимальных высоты из 1000 испытаний */
     val trialList = for (i <- 1 to TrialCount) yield getHmax
@@ -49,18 +49,36 @@ object LabTwo {
       intervalList += Interval(value, value + increment)
     }
 
-    /** Распределение значений высот по интервалам */
+    // Распределение значений высот по интервалам
     intervalList.foreach(_.addBelongValues(trialList))
-    intervalList.foreach(println)
 
-    // Разделение интервала на 2, подходящий и остаток
+    // Разделение интервала на 3 части (меньше, подходит, больше)
+    val NeedCount = TrialCount * Probability
     var sum = 0
-    val part = intervalList.partition { interval =>
+    var index = 0
+    var first = true
+
+    val parts = intervalList.groupBy { interval =>
       sum += interval.valueCount
-      sum <= TrialCount * Probability
+      index += 1
+      val group = sum match {
+        case s if s < NeedCount => "less"
+        case s if (s == NeedCount) || (s > NeedCount && first) =>
+          print(">> ")
+          first = false; "suitable"
+        case _ => "greater"
+      }
+      println(s"$index. sum: $sum, $interval")
+      group
     }
 
-    (intervalList, part._1, part._2)
+    val partList = Seq(
+      "Меньшая высота" -> parts.get("less").get,
+      "Подходящая высота" -> parts.get("suitable").get,
+      "Большая высота" -> parts.get("greater").get
+    )
+
+    (intervalList, partList)
   }
 
   /** Возвращает макс. значение высоты из 100 сгенерированных */
