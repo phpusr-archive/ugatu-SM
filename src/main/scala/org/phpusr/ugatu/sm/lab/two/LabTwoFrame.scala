@@ -15,17 +15,18 @@ import scalafx.scene.chart.{BarChart, CategoryAxis, NumberAxis, XYChart}
 /**
  * Форма с диаграммой для 2-й лабы
  */
-//TODO поменять заголовки
 //TODO сделать 95%
 //TODO убрать все лишнее
-//TODO настроить размер
 object LabTwoFrame extends JFXApp {
 
   /** Интервалы со значениями в них */
-  private val intervals = LabTwo.action()
+  private val (intervals, suitable, residue) = LabTwo.action()
 
   stage = new JFXApp.PrimaryStage {
-    title = "Advanced Bar Chart Example"
+    title = "Lab 2"
+    width = 1024
+    height = 600
+
     scene = new Scene {
       root = {
 
@@ -40,21 +41,25 @@ object LabTwoFrame extends JFXApp {
           tickLabelFormatter = NumberAxis.DefaultFormatter(this)
         }
 
-        val series = new XYChart.Series[String, Number] {
-          name = "Data"
-          data = intervals.map { e =>
-            XYChart.Data[String, Number](e.endAsString, e.valueCount)
+        val seriesList = List(("Подходящая высота", suitable), ("Излишняя высота", residue)).map { interval =>
+          new XYChart.Series[String, Number] {
+            name = interval._1
+            data = interval._2.map { e =>
+              XYChart.Data[String, Number](e.endAsString, e.valueCount)
+            }
           }
         }
 
         // Диаграмма
         new BarChart(xAxis, yAxis) {
-          barGap = 0
-          categoryGap = 3
-          title = "Advanced Bar Chart"
-          data() ++= Seq(series)
+          barGap = -3
+          categoryGap = 0
+          title = "Диаграмма высот"
+          data() ++= Seq(seriesList(0), seriesList(1))
         }
       }
     }
+
   }
+
 }

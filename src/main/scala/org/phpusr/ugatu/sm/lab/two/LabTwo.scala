@@ -53,7 +53,14 @@ object LabTwo {
     intervalList.foreach(_.addBelongValues(trialList))
     intervalList.foreach(println)
 
-    intervalList
+    // Разделение интервала на 2, подходящий и остаток
+    var sum = 0
+    val part = intervalList.partition { interval =>
+      sum += interval.valueCount
+      sum <= TrialCount * Probability
+    }
+
+    (intervalList, part._1, part._2)
   }
 
   /** Возвращает макс. значение высоты из 100 сгенерированных */
@@ -82,7 +89,7 @@ case class Interval(start: Float, end: Float) {
   private val valueList = new ListBuffer[Float]
 
   /** Конечное значение в виде строки для диаграммы */
-  def endAsString = LabTwo.formatFloat(end)
+  def endAsString = end formatted "%1.1f"
 
   /** Добавляет только те значения, которые принадлежат интервалу */
   def addBelongValues(list: Seq[Float]) {
