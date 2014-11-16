@@ -31,7 +31,6 @@ object LabTwoFrame extends JFXApp {
         val xAxis = new CategoryAxis {
           label = "Высота"
           categories = ObservableBuffer(intervalList.map(_.endAsString))
-          //tickLabelFormatter = NumberAxis.DefaultFormatter(this)
         }
 
         val yAxis = new NumberAxis {
@@ -39,6 +38,7 @@ object LabTwoFrame extends JFXApp {
           tickLabelFormatter = NumberAxis.DefaultFormatter(this)
         }
 
+        /** Создание 3-х рядов для диаграммы */
         val seriesList = partList.map { interval =>
           new XYChart.Series[String, Number] {
             name = interval._1
