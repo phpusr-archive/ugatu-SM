@@ -66,7 +66,7 @@ object LabOne extends App {
       println(s"$i - $count")
       count.toDouble / n
     }.map(e => Math.pow(e-0.1, 2)).sum
-    println(s"Sum: $sum, must be: $Hi2Table")
+    println(s"Sum: $sum, must be < $Hi2Table")
   }
 
   /** Тест групп */
@@ -83,7 +83,7 @@ object LabOne extends App {
       println(s"$i - $count")
       count.toDouble / n
     }.map(e => Math.pow(e-0.1, 2)).sum
-    println(s"Sum: $sum, must be: $Hi2Table")
+    println(s"Sum: $sum, must be < $Hi2Table")
   }
 
   /** Вывод всех СВ */
